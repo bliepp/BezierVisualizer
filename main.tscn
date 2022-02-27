@@ -1,0 +1,260 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://bezier.gd" type="Script" id=1]
+[ext_resource path="res://handle.gd" type="Script" id=2]
+[ext_resource path="res://theme/custom.theme" type="Theme" id=3]
+[ext_resource path="res://bootstrap-icons/play-fill.svg" type="Texture" id=4]
+[ext_resource path="res://bootstrap-icons/skip-end-fill.svg" type="Texture" id=5]
+[ext_resource path="res://bootstrap-icons/skip-start-fill.svg" type="Texture" id=6]
+[ext_resource path="res://bootstrap-icons/pause-fill.svg" type="Texture" id=7]
+[ext_resource path="res://theme/panel.stylebox" type="StyleBox" id=8]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bezier" type="ColorRect" parent="HBoxContainer"]
+margin_right = 803.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+start_handle = NodePath("Start")
+end_handle = NodePath("End")
+modifier_handle1 = NodePath("Modifier1")
+modifier_handle2 = NodePath("Modifier2")
+
+[node name="Start" type="Position2D" parent="HBoxContainer/Bezier"]
+position = Vector2( 200, 450 )
+script = ExtResource( 2 )
+
+[node name="End" type="Position2D" parent="HBoxContainer/Bezier"]
+position = Vector2( 700, 500 )
+script = ExtResource( 2 )
+
+[node name="Modifier1" type="Position2D" parent="HBoxContainer/Bezier"]
+position = Vector2( 100, 200 )
+script = ExtResource( 2 )
+color = Color( 0.74902, 0.74902, 0.74902, 1 )
+
+[node name="Modifier2" type="Position2D" parent="HBoxContainer/Bezier"]
+position = Vector2( 600, 100 )
+script = ExtResource( 2 )
+color = Color( 0.74902, 0.74902, 0.74902, 1 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+margin_left = 803.0
+margin_right = 1024.0
+margin_bottom = 600.0
+custom_styles/bg = ExtResource( 8 )
+scroll_horizontal_enabled = false
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/ScrollContainer"]
+margin_right = 221.0
+margin_bottom = 510.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ScrollContainer/MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 211.0
+margin_bottom = 500.0
+
+[node name="AnimationControls" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_right = 201.0
+margin_bottom = 64.0
+
+[node name="Start" type="TextureButton" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControls"]
+margin_right = 45.0
+margin_bottom = 64.0
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+texture_normal = ExtResource( 6 )
+expand = true
+stretch_mode = 5
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControls"]
+margin_left = 49.0
+margin_right = 64.0
+margin_bottom = 64.0
+custom_constants/separation = 15
+
+[node name="PlayPause" type="TextureButton" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControls"]
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 64.0
+mouse_default_cursor_shape = 2
+toggle_mode = true
+pressed = true
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 7 )
+stretch_mode = 5
+
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControls"]
+margin_left = 136.0
+margin_right = 151.0
+margin_bottom = 64.0
+custom_constants/separation = 15
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="End" type="TextureButton" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControls"]
+margin_left = 155.0
+margin_right = 201.0
+margin_bottom = 64.0
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+texture_normal = ExtResource( 5 )
+expand = true
+stretch_mode = 5
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 68.0
+margin_right = 201.0
+margin_bottom = 88.0
+custom_styles/separator = SubResource( 1 )
+custom_constants/separation = 20
+
+[node name="SpeedLabel" type="Label" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 92.0
+margin_right = 201.0
+margin_bottom = 112.0
+text = "Speed"
+
+[node name="Speed" type="OptionButton" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 116.0
+margin_right = 201.0
+margin_bottom = 156.0
+mouse_default_cursor_shape = 2
+custom_constants/arrow_margin = 14
+text = "1.0x"
+items = [ "0.5x", null, false, 0, null, "1.0x", null, false, 1, null, "1.5x", null, false, 2, null, "2.0x", null, false, 3, null, "2.5x", null, false, 4, null, "3.0x", null, false, 5, null ]
+selected = 1
+
+[node name="HSeparator2" type="HSeparator" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 160.0
+margin_right = 201.0
+margin_bottom = 180.0
+custom_styles/separator = SubResource( 1 )
+custom_constants/separation = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DisplayLabel" type="Label" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 184.0
+margin_right = 201.0
+margin_bottom = 204.0
+text = "Display"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Handles" type="CheckButton" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 208.0
+margin_right = 201.0
+margin_bottom = 255.0
+mouse_default_cursor_shape = 2
+custom_constants/hseparation = 30
+pressed = true
+text = "Handles"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Casteljau" type="CheckButton" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 259.0
+margin_right = 201.0
+margin_bottom = 306.0
+mouse_default_cursor_shape = 2
+custom_constants/hseparation = 30
+text = "De-Casteljau Lines"
+
+[node name="HSeparator3" type="HSeparator" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 310.0
+margin_right = 201.0
+margin_bottom = 330.0
+custom_styles/separator = SubResource( 1 )
+custom_constants/separation = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DimensionLabel" type="Label" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 334.0
+margin_right = 201.0
+margin_bottom = 354.0
+text = "Dimension"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Dimension" type="OptionButton" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 358.0
+margin_right = 201.0
+margin_bottom = 398.0
+text = "Cubic"
+items = [ "Quadratic", null, false, 0, null, "Cubic", null, false, 1, null ]
+selected = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator4" type="HSeparator" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 402.0
+margin_right = 201.0
+margin_bottom = 422.0
+custom_styles/separator = SubResource( 1 )
+custom_constants/separation = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SegmentsLabel" type="Label" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 426.0
+margin_right = 201.0
+margin_bottom = 446.0
+text = "Segments"
+
+[node name="Segments" type="SpinBox" parent="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+margin_top = 450.0
+margin_right = 201.0
+margin_bottom = 490.0
+min_value = 1.0
+max_value = 1000.0
+value = 500.0
+
+[connection signal="pressed" from="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControls/Start" to="HBoxContainer/Bezier" method="press_start"]
+[connection signal="toggled" from="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControls/PlayPause" to="HBoxContainer/Bezier" method="toggle_playpause"]
+[connection signal="pressed" from="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AnimationControls/End" to="HBoxContainer/Bezier" method="press_end"]
+[connection signal="item_selected" from="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Speed" to="HBoxContainer/Bezier" method="change_speed"]
+[connection signal="toggled" from="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Handles" to="HBoxContainer/Bezier" method="toggle_handles"]
+[connection signal="toggled" from="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Casteljau" to="HBoxContainer/Bezier" method="toggle_casteljau"]
+[connection signal="item_selected" from="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Dimension" to="HBoxContainer/Bezier" method="change_dimension"]
+[connection signal="value_changed" from="HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Segments" to="HBoxContainer/Bezier" method="change_segments"]

@@ -1,0 +1,42 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "ColorRect",
+"class": "Bezier",
+"language": "GDScript",
+"path": "res://bezier.gd"
+}, {
+"base": "Position2D",
+"class": "BezierHandle",
+"language": "GDScript",
+"path": "res://handle.gd"
+} ]
+_global_script_class_icons={
+"Bezier": "",
+"BezierHandle": ""
+}
+
+[application]
+
+config/name="Bezier Visualizer"
+run/main_scene="res://main.tscn"
+config/icon="res://bootstrap-icons/bezier2.svg"
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_clear_color=Color( 1, 1, 1, 1 )
+quality/filters/msaa=2
+quality/filters/use_fxaa=true
+environment/default_environment="res://default_env.tres"
