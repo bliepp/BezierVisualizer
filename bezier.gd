@@ -19,6 +19,7 @@ export (float, 1, 10) var width = 2.5
 export (int) var segments = 500
 
 
+export (int, "Off", "On") var draw_dots = 1
 export (int, "Off", "On") var draw_handles = 1
 export (int, "Off", "On") var draw_casteljau_lines = 0
 export (int, "Off", "On") var animate = 1
@@ -47,7 +48,9 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	# draw helpers
+	# if both handles of the cubic bezier are at the smae place it is
+	# equivalent to a quadratic one. This is of course less optimized
+	# but very convenient
 	var _handle2 : Node
 	match dimension:
 		DIMENSION.QUADRATIC:
@@ -55,27 +58,23 @@ func _draw() -> void:
 		DIMENSION.CUBIC:
 			_handle2 = handle2
 
+	# draw handle lines
 	if draw_handles or draw_casteljau_lines:
 		draw_line(start.position, handle1.position, Color.gray, width*0.7, true)
 		draw_line(end.position, _handle2.position, Color.gray, width*0.7, true)
 
+	# generate casteljau lines explicitly
 	if draw_casteljau_lines:
+		var lerp_start_h1 = lerp(start.position, handle1.position, time)
+		var lerp_middle = lerp(handle1.position, _handle2.position, time)
+		var lerp_h2_end = lerp(_handle2.position, end.position, time)
+		var inner_1 = lerp(lerp_start_h1, lerp_middle, time)
+		var inner_2 = lerp(lerp_middle, lerp_h2_end, time)
+
 		draw_line(handle1.position, _handle2.position, Color.gray, width*0.7, true)
-
-		var handle1_1 = lerp(start.position, handle1.position, time)
-		var handle1_2 = lerp(handle1.position, _handle2.position, time)
-		draw_line(handle1_1, handle1_2, Color.gray, width*0.7, true)
-
-		var handle2_1 = lerp(handle1.position, _handle2.position, time)
-		var handle2_2 = lerp(_handle2.position, end.position, time)
-		draw_line(handle2_1, handle2_2, Color.gray, width*0.7, true)
-
-		var endhandle_1 = lerp(handle1_1, handle2_1, time)
-		var endhandle_2 = lerp(handle1_2, handle2_2, time)
-		draw_line(endhandle_1, endhandle_2, Color.gray, width*0.7, true)
-		
-		var current = lerp(endhandle_1, endhandle_2, time)
-		draw_circle(current, end.size, end.color)
+		draw_line(lerp_start_h1, lerp_middle, Color.gray, width*0.7, true)
+		draw_line(lerp_middle, lerp_h2_end, Color.gray, width*0.7, true)
+		draw_line(inner_1, inner_2, Color.gray, width*0.7, true)
 
 	# generate bezier curve
 	var maximum_t = (segments+1)*time
@@ -86,11 +85,13 @@ func _draw() -> void:
 		points.append(p)
 	if len(points) > 1:
 		draw_polyline(points, Color.black, width, true)
+		if draw_casteljau_lines and draw_dots:
+			draw_circle(points[-1], end.size, Color.gray)
 
-	# draw handles
-	draw_circle(start.position, start.size, start.color)
-	draw_circle(end.position, end.size, end.color)
-	if draw_handles or draw_casteljau_lines:
+	# draw handle dots
+	if draw_dots:
+		draw_circle(start.position, start.size, start.color)
+		draw_circle(end.position, end.size, end.color)
 		draw_circle(handle1.position, handle1.size, handle1.color)
 		draw_circle(_handle2.position, _handle2.size, _handle2.color)
 
@@ -103,6 +104,8 @@ func press_end() -> void:
 	time = 1.0
 func change_speed(index: int) -> void:
 	animate_speed = (index+1)*0.5
+func toggle_dots(button_pressed: bool) -> void:
+	draw_dots = int(button_pressed)
 func toggle_handles(button_pressed: bool) -> void:
 	draw_handles = int(button_pressed)
 func toggle_casteljau(button_pressed: bool) -> void:
